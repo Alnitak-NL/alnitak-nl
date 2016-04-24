@@ -1,0 +1,26 @@
+{
+    "default_tasks": ["sass"],
+    "install_tasks": ["copy"],
+    "production": true,
+    "sass": {
+        "src": [
+            "src/sass/**/*.scss"
+        ],
+        "dest": "web/assets/css",
+        "watch": [
+            "style/**/*.scss"
+        ],
+        "includePaths": [],
+        "autoprefix": [
+            "last 2 versions"
+        ]
+    },
+    "copy": {
+        "items": [
+            {
+                "src": "src/html/index.html",
+                "dest": "web/"
+            }
+        ]
+    }
+}
