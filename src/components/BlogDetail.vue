@@ -1,7 +1,7 @@
 <template>
     <section>
         <article>
-            <header v-bind:style="{ 'background-color': blog.color }">
+            <header v-bind:style="{ 'background-color': blog.color, 'background-image': 'url(' + blog.img + ')' }">
                 <h1 class="centered">{{blog.title}}</h1>
             </header>
             <main class="centered">
@@ -22,6 +22,14 @@
         components: {
             TextSlice,
         },
+        methods: {
+            cloudinaryUrlGenerator(url) {
+                if (url != null) {
+                    return 'https://res.cloudinary.com/alnitak/image/fetch/w_1900,h_500,c_fill,f_auto/' + url;
+                }
+                return url;
+            },
+        },
         data() {
             return {
                 msg: 'Welcome to Your Vue.js App',
@@ -41,6 +49,7 @@
                 const blog = {
                     title: result.data.title[0].text,
                     color: (result.data.overview_color) ? result.data.overview_color : '#000',
+                    img: this.cloudinaryUrlGenerator(result.data.header_image.url),
                     content: result.data.body.map((slice) => {
                         const block = {
                             component: (Object.prototype.hasOwnProperty.call(sliceComponentMap, slice.slice_type)) ? sliceComponentMap[slice.slice_type] : null,
@@ -57,6 +66,7 @@
 <style lang="scss" scoped>
     header {
         padding: 100px 20px;
+        background-size: cover;
     }
 
     h1 {

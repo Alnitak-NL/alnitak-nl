@@ -2,7 +2,7 @@
     <section>
         <article v-for="(blog, index) in blogs" v-bind:key="blog.id" v-bind:title="blog.title" :class="{ 'first': index === 0 }">
             <router-link :to="{ name: 'BlogDetail', params: { 'uid': blog.uid }}">
-                <div v-bind:style="{ 'background-color': blog.color }"><h1>{{ blog.title }}</h1></div>
+                <div v-bind:style="{ 'background-color': blog.color, 'background-image': 'url(' + blog.img + ')' }"><h1>{{ blog.title }}</h1></div>
             </router-link>
         </article>
     </section>
@@ -12,6 +12,14 @@
 
     export default {
         name: 'BlogOverview',
+        methods: {
+            cloudinaryUrlGenerator(url) {
+                if (url != null) {
+                    return 'https://res.cloudinary.com/alnitak/image/fetch/w_400,h_400,c_fill,f_auto/' + url;
+                }
+                return url;
+            },
+        },
 
         data() {
             return {
@@ -28,11 +36,13 @@
                 { orderings: '[my.blog.date desc]' }),
             ).then((response) => {
                 this.blogs = response.results.map((result) => {
+                    // console.log(result);
                     const object = {
                         id: result.id,
                         uid: result.uid,
                         title: result.data.title[0].text,
                         color: (result.data.overview_color) ? result.data.overview_color : '#000',
+                        img: this.cloudinaryUrlGenerator(result.data.header_image.url),
                     };
                     return object;
                 });
@@ -61,6 +71,7 @@
             > div {
                 min-height: 300px;
                 display: block;
+                background-size: cover;
             }
         }
 
