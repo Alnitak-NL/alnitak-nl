@@ -44,6 +44,10 @@
         max-width: 1024px;
         margin: 0 auto;
     }
+
+    img {
+        width: 100%;
+    }
 </style>
 <style lang="scss" scoped>
     header {
