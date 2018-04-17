@@ -15,8 +15,27 @@
             // eslint-disable-next-line
             htmlSerializer(type, element, content, children) {
                 if (type === Elements.image) {
-                    const url = 'https://res.cloudinary.com/alnitak/image/fetch/w_1024,f_auto/' + element.url;
-                    return '<img src="' + url + '" alt="' + element.alt + '">';
+                    const src = 'https://res.cloudinary.com/alnitak/image/fetch/w_1024,f_auto/' + element.url;
+                    const srcSet = [
+                        {
+                            src: 'https://res.cloudinary.com/alnitak/image/fetch/w_2048,f_auto/' + element.url,
+                            size: '2048w',
+                        },
+                        {
+                            src: 'https://res.cloudinary.com/alnitak/image/fetch/w_1280,f_auto/' + element.url,
+                            size: '1280w',
+                        },
+                        {
+                            src: 'https://res.cloudinary.com/alnitak/image/fetch/w_768,f_auto/' + element.url,
+                            size: '768w',
+                        },
+                    ].reduce((acc, cur) => {
+                        // eslint-disable-next-line
+                        acc = acc + cur.src + ' ' + cur.size + ',';
+                        return acc;
+                    }, '');
+
+                    return '<img src="' + src + '" srcset="' + srcSet + '" sizes="(min-width: 1024px) 1024px, 100vw" alt="' + element.alt + '">';
                 }
 
                 return null;
