@@ -16,11 +16,14 @@
     import * as Prismic from 'prismic-javascript';
     import TextSlice from './slices/TextSlice';
     import CodeSlice from './slices/CodeSlice';
+    import ImageSlice from './slices/ImageSlice';
 
     export default {
         name: 'BlogDetail',
         components: {
             TextSlice,
+            ImageSlice,
+            CodeSlice,
         },
         methods: {
             cloudinaryUrlGenerator(url) {
@@ -42,6 +45,7 @@
             const sliceComponentMap = {
                 text: TextSlice,
                 code_snippet: CodeSlice,
+                image: ImageSlice,
             };
 
             Prismic.getApi(apiEndPoint, {}).then(api => api.getByUID('blog', this.$route.params.uid),
