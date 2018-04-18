@@ -3,26 +3,32 @@
         <picture>
             <source
                     media="(min-width: 768px)"
-                    v-bind:srcset="images.image_desktop.small"
+                    v-bind:srcset="images.image_desktop"
             />
 
             <source
                     media="(min-width: 480px)"
-                    v-bind:srcset="images.image_tablet.small"
+                    v-bind:srcset="images.image_tablet"
             />
 
             <source
                     media="(max-width: 480px)"
-                    v-bind:srcset="images.image_mobile.small"
+                    v-bind:srcset="images.image_mobile"
             />
 
-            <img v-bind:src="images.image_desktop.small" v-bind:alt="images.alt"/>
+            <img v-bind:src="images.image_fallback" v-bind:alt="images.alt"/>
         </picture>
     </section>
 </template>
 <script>
     export default {
         props: ['content'],
+        methods: {
+            generateImageUrl(image, size, pixelDensity = null) {
+                const imageUrl = 'https://res.cloudinary.com/alnitak/image/fetch/w_' + size + ',f_auto/' + image;
+                return imageUrl + ((pixelDensity != null) ? ' ' + pixelDensity + 'x' : '');
+            },
+        },
         data() {
             return {
                 htmlContent: null,
@@ -32,19 +38,11 @@
 
         created() {
             this.images = {
-                image_desktop: {
-                    small: 'https://res.cloudinary.com/alnitak/image/fetch/w_1024,f_auto/' + this.content.primary.image_desktop.url,
-                    large: 'https://res.cloudinary.com/alnitak/image/fetch/w_2048,f_auto/' + this.content.primary.image_desktop.url,
-                },
-                image_tablet: {
-                    small: 'https://res.cloudinary.com/alnitak/image/fetch/w_768,f_auto/' + this.content.primary.image_tablet.url,
-                    large: 'https://res.cloudinary.com/alnitak/image/fetch/w_1536,f_auto/' + this.content.primary.image_tablet.url,
-                },
-                image_mobile: {
-                    small: 'https://res.cloudinary.com/alnitak/image/fetch/w_480,f_auto/' + this.content.primary.image_mobile.url,
-                    large: 'https://res.cloudinary.com/alnitak/image/fetch/w_960,f_auto/' + this.content.primary.image_mobile.url,
-                },
-                alt: 'test',
+                image_desktop: this.generateImageUrl(this.content.primary.image_desktop.url, 1024) + ', ' + this.generateImageUrl(this.content.primary.image_desktop.url, 2048, 2),
+                image_tablet: this.generateImageUrl(this.content.primary.image_tablet.url, 768) + ', ' + this.generateImageUrl(this.content.primary.image_tablet.url, 1536, 2),
+                image_mobile: this.generateImageUrl(this.content.primary.image_mobile.url, 480) + ', ' + this.generateImageUrl(this.content.primary.image_mobile.url, 960, 2),
+                image_fallback: this.generateImageUrl(this.content.primary.image_desktop.url, 1024),
+                alt: this.content.primary.alt_text[0].text,
             };
         },
     };
