@@ -24,9 +24,7 @@
         name: 'BlogOverview',
         methods: {
             searchArticles() {
-                const apiEndPoint = 'https://alnitak-nl.prismic.io/api/v2';
-
-                Prismic.getApi(apiEndPoint, {}).then(api => api.query(
+                this.getPrismicApi().then(api => api.query(
                     [
                         Prismic.Predicates.at('document.type', 'blog'),
                         Prismic.Predicates.fulltext('document', this.search),

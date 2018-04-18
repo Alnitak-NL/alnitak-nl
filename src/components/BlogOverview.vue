@@ -12,15 +12,6 @@
 
     export default {
         name: 'BlogOverview',
-        methods: {
-            cloudinaryUrlGenerator(url) {
-                if (url != null) {
-                    return 'https://res.cloudinary.com/alnitak/image/fetch/w_400,h_400,c_fill,f_auto/' + url;
-                }
-                return url;
-            },
-        },
-
         data() {
             return {
                 blogs: [],
@@ -28,21 +19,18 @@
             };
         },
 
-        beforeMount() {
-            const apiEndPoint = 'https://alnitak-nl.prismic.io/api/v2';
-
-            Prismic.getApi(apiEndPoint, {}).then(api => api.query(
+        created() {
+            this.getPrismicApi().then(api => api.query(
                 Prismic.Predicates.at('document.type', 'blog'),
                 { orderings: '[my.blog.date desc]' }),
             ).then((response) => {
                 this.blogs = response.results.map((result) => {
-                    // console.log(result);
                     const object = {
                         id: result.id,
                         uid: result.uid,
                         title: result.data.title[0].text,
                         color: (result.data.overview_color) ? result.data.overview_color : '#000',
-                        img: this.cloudinaryUrlGenerator(result.data.header_image.url),
+                        img: this.cloudinaryImage(result.data.header_image.url, 'w_400,h_400,c_fill,f_auto'),
                     };
                     return object;
                 });
