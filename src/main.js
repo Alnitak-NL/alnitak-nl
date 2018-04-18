@@ -6,7 +6,6 @@ import VuePrism from 'vue-prism';
 import App from './App';
 import router from './router/index';
 
-
 Vue.config.productionTip = false;
 
 Vue.mixin({
