@@ -23,12 +23,6 @@
 <script>
     export default {
         props: ['content'],
-        methods: {
-            generateImageUrl(image, size, pixelDensity = null) {
-                const imageUrl = 'https://res.cloudinary.com/alnitak/image/fetch/w_' + size + ',f_auto/' + image;
-                return imageUrl + ((pixelDensity != null) ? ' ' + pixelDensity + 'x' : '');
-            },
-        },
         data() {
             return {
                 htmlContent: null,
@@ -38,10 +32,10 @@
 
         created() {
             this.images = {
-                image_desktop: this.generateImageUrl(this.content.primary.image_desktop.url, 1024) + ', ' + this.generateImageUrl(this.content.primary.image_desktop.url, 2048, 2),
-                image_tablet: this.generateImageUrl(this.content.primary.image_tablet.url, 768) + ', ' + this.generateImageUrl(this.content.primary.image_tablet.url, 1536, 2),
-                image_mobile: this.generateImageUrl(this.content.primary.image_mobile.url, 480) + ', ' + this.generateImageUrl(this.content.primary.image_mobile.url, 960, 2),
-                image_fallback: this.generateImageUrl(this.content.primary.image_desktop.url, 1024),
+                image_desktop: this.cloudinaryImage(this.content.primary.image_desktop.url, 'w_1024,f_auto') + ', ' + this.cloudinaryImage(this.content.primary.image_desktop.url, 'w_2048,f_auto') + ' 2x',
+                image_tablet: this.cloudinaryImage(this.content.primary.image_tablet.url, 'w_768,f_auto') + ', ' + this.cloudinaryImage(this.content.primary.image_tablet.url, 'w_1536,f_auto') + ' 2x',
+                image_mobile: this.cloudinaryImage(this.content.primary.image_mobile.url, 'w_480,f_auto') + ', ' + this.cloudinaryImage(this.content.primary.image_mobile.url, 'w_960,f_auto') + ' 2x',
+                image_fallback: this.cloudinaryImage(this.content.primary.image_desktop.url, 'w_1024,f_auto'),
                 alt: this.content.primary.alt_text[0].text,
             };
         },

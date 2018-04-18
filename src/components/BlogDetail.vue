@@ -13,7 +13,6 @@
     </section>
 </template>
 <script>
-    import * as Prismic from 'prismic-javascript';
     import TextSlice from './slices/TextSlice';
     import CodeSlice from './slices/CodeSlice';
     import ImageSlice from './slices/ImageSlice';
@@ -25,14 +24,6 @@
             ImageSlice,
             CodeSlice,
         },
-        methods: {
-            cloudinaryUrlGenerator(url) {
-                if (url != null) {
-                    return 'https://res.cloudinary.com/alnitak/image/fetch/w_1900,h_500,c_fill,f_auto/' + url;
-                }
-                return url;
-            },
-        },
         data() {
             return {
                 msg: 'Welcome to Your Vue.js App',
@@ -41,19 +32,18 @@
         },
 
         created() {
-            const apiEndPoint = 'https://alnitak-nl.prismic.io/api/v2';
             const sliceComponentMap = {
                 text: TextSlice,
                 code_snippet: CodeSlice,
                 image: ImageSlice,
             };
 
-            Prismic.getApi(apiEndPoint, {}).then(api => api.getByUID('blog', this.$route.params.uid),
+            this.getPrismicApi().then(api => api.getByUID('blog', this.$route.params.uid),
             ).then((result) => {
                 const blog = {
                     title: result.data.title[0].text,
                     color: (result.data.overview_color) ? result.data.overview_color : '#000',
-                    img: this.cloudinaryUrlGenerator(result.data.header_image.url),
+                    img: this.cloudinaryImage(result.data.header_image.url, 'w_1900,h_500,c_fill,f_auto'),
                     content: result.data.body.map((slice) => {
                         const block = {
                             component: (Object.prototype.hasOwnProperty.call(sliceComponentMap, slice.slice_type)) ? sliceComponentMap[slice.slice_type] : null,

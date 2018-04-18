@@ -15,23 +15,10 @@
             // eslint-disable-next-line
             htmlSerializer(type, element, content, children) {
                 if (type === Elements.image) {
-                    const src = 'https://res.cloudinary.com/alnitak/image/fetch/w_1024,f_auto/' + element.url;
-                    const srcSet = [
-                        {
-                            src: 'https://res.cloudinary.com/alnitak/image/fetch/w_2048,f_auto/' + element.url,
-                            size: '2048w',
-                        },
-                        {
-                            src: 'https://res.cloudinary.com/alnitak/image/fetch/w_1280,f_auto/' + element.url,
-                            size: '1280w',
-                        },
-                        {
-                            src: 'https://res.cloudinary.com/alnitak/image/fetch/w_768,f_auto/' + element.url,
-                            size: '768w',
-                        },
-                    ].reduce((acc, cur) => {
+                    const src = this.cloudinaryImage(element.url, 'w_1024,f_auto');
+                    const srcSet = [2048, 1280, 1024].reduce((acc, cur) => {
                         // eslint-disable-next-line
-                        acc = acc + cur.src + ' ' + cur.size + ',';
+                        acc = acc + this.cloudinaryImage(element.url, 'w_' + cur + ',f_auto') + ' ' + cur + 'w,';
                         return acc;
                     }, '');
 
