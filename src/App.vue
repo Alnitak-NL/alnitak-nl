@@ -3,7 +3,7 @@
         <header>
             <nav class="centered">
                 <router-link :to="{ name: 'BlogOverview' }">
-                    <div class="title-name">My weblogje</div>
+                    <div class="title-name">My weblog</div>
                 </router-link>
 
                 <router-link :to="{ name: 'BlogSearch' }" class="search">
